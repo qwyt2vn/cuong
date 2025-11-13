@@ -49,7 +49,7 @@ function submitChoice(choice) {
 
   if (choice === "Tham gia") {
     window.open(
-      "https://www.google.com/maps?q=Số+96+Đường+Thôn+6,+Bắc+Sơn,+An+Dương,+Hải+Phòng",
+      "https://maps.app.goo.gl/E5BN6gBA4B9spQzv8",
       "_blank"
     );
   } else if (choice === "Bận - Mừng online") {
