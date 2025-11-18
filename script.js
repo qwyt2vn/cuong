@@ -119,3 +119,24 @@ function showQrPopup() {
     </div>`;
   document.body.appendChild(overlay);
 }
+// 🍂 Tạo hiệu ứng lá rơi
+function createLeaf() {
+  const leaf = document.createElement("img");
+  leaf.src = "leaf.png"; // 👉 đặt file leaf.png vào cùng thư mục index.html
+  leaf.classList.add("leaf");
+
+  // vị trí rơi ngẫu nhiên
+  leaf.style.left = Math.random() * 100 + "vw";
+
+  // tốc độ rơi ngẫu nhiên
+  const duration = 6 + Math.random() * 5;
+  leaf.style.animationDuration = duration + "s";
+
+  document.body.appendChild(leaf);
+
+  // Xoá lá sau khi rơi xong
+  setTimeout(() => leaf.remove(), duration * 1000);
+}
+
+// tạo lá liên tục mỗi 500ms
+setInterval(createLeaf, 600);
