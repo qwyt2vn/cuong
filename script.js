@@ -15,17 +15,65 @@ intro.addEventListener("click", () => {
 
 // 🎵 Phát nhạc
 function initMusic() {
-  music.play().catch(() => console.log("⚠️ Cần tương tác người dùng để phát nhạc."));
+  if (!music) return;
+  music.play().catch(() => {
+    console.log("⚠️ Cần tương tác người dùng để phát nhạc.");
+    // Nếu không phát được, hiển thị nút bật nhạc (không bắt buộc, nhưng hữu ích)
+    if (!document.getElementById('playMusicBtn')) {
+      const btn = document.createElement('button');
+      btn.id = 'playMusicBtn';
+      btn.style.position = 'fixed';
+      btn.style.bottom = '18px';
+      btn.style.right = '18px';
+      btn.style.background = '#00b3b3';
+      btn.style.color = 'white';
+      btn.style.border = 'none';
+      btn.style.padding = '10px 14px';
+      btn.style.borderRadius = '12px';
+      btn.style.cursor = 'pointer';
+      btn.innerText = 'Bật nhạc';
+      btn.onclick = () => {
+        music.play().then(() => btn.remove()).catch(() => console.log('Không thể phát nhạc'));
+      };
+      document.body.appendChild(btn);
+    }
+  });
 }
 
-// 💍 Đếm ngược
+// 💍 Đếm ngược (bây giờ hỗ trợ cả giờ)
 function updateCountdown() {
-  const target = new Date("2025-11-30T00:00:00");
+  const dateEl = document.querySelector('.date');
+  if (!dateEl) return;
+  const eventTimeAttr = dateEl.dataset.eventTime || "2025-11-30T10:00:00";
+  const target = new Date(eventTimeAttr);
   const now = new Date();
   const diff = target - now;
+
+  // Cập nhật hiển thị giờ trên ô ngày (đồng bộ)
+  const timeDisplay = document.getElementById('eventTimeDisplay');
+  if (timeDisplay) {
+    const hh = String(target.getHours()).padStart(2, '0');
+    const mm = String(target.getMinutes()).padStart(2, '0');
+    timeDisplay.innerText = `${hh}:${mm}`;
+  }
+
+  // Cập nhật ngày + tháng + năm (nếu bạn muốn tự động hóa)
+  const dayNumber = document.getElementById('dayNumber');
+  const monthYear = document.getElementById('monthYear');
+  const weekdayLabel = document.getElementById('weekdayLabel');
+  if (dayNumber) dayNumber.innerText = String(target.getDate());
+  if (monthYear) {
+    const months = ['THÁNG 1','THÁNG 2','THÁNG 3','THÁNG 4','THÁNG 5','THÁNG 6','THÁNG 7','THÁNG 8','THÁNG 9','THÁNG 10','THÁNG 11','THÁNG 12'];
+    monthYear.innerHTML = `${months[target.getMonth()]}<br>NĂM ${target.getFullYear()}`;
+  }
+  if (weekdayLabel) {
+    const weekdays = ['CHỦ NHẬT','THỨ HAI','THỨ BA','THỨ TƯ','THỨ NĂM','THỨ SÁU','THỨ BẢY'];
+    weekdayLabel.innerText = weekdays[target.getDay()];
+  }
+
   if (diff <= 0) {
     document.getElementById("countdown").innerText =
-      "💞 Hôm nay là ngày trọng đại của chúng ta 💞";
+      `💞 Hôm nay là ngày trọng đại của chúng ta (lúc ${timeDisplay ? timeDisplay.innerText : ''}) 💞`;
     return;
   }
   const d = Math.floor(diff / (1000 * 60 * 60 * 24));

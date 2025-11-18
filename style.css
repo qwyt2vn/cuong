@@ -56,6 +56,10 @@ body {
   white-space: nowrap;
   display: inline-block;
 }
+#intro-screen.open .tap-text {
+  opacity: 0;
+  transition: opacity 0.6s ease-out;
+}
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
@@ -112,10 +116,13 @@ body {
   font-size: 1rem;
   margin: 10px;
 }
+
+/* --- ngày + giờ --- */
 .date {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 12px;
   margin: 20px;
 }
 .date .big {
@@ -128,6 +135,36 @@ body {
   font-size: 1rem;
   color: #007777;
 }
+.weekday {
+  font-size: 0.95rem;
+  color: #007777;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- giờ cạnh ngày --- */
+.time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0,179,179,0.06);
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 2px solid rgba(0,179,179,0.18);
+}
+.big-time {
+  font-size: 28px;
+  font-weight: 700;
+  color: #007777;
+  line-height: 1;
+}
+.small-time {
+  font-size: 0.8rem;
+  color: #007777;
+  margin-top: 2px;
+  letter-spacing: 1px;
+}
+
 .countdown {
   font-weight: bold;
   color: #008080;

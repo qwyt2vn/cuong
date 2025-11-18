@@ -21,6 +21,7 @@
   </div>
 
   <!-- 💍 Nội dung chính -->
+  <!-- data-event-time là chỗ duy nhất bạn cần chỉnh để thay đổi thời gian sự kiện -->
   <div class="main-content hidden" onclick="initMusic()">
     <div class="photo-frame">
       <img src="photo.jpg" alt="Ảnh cưới" class="wedding-photo" />
@@ -31,26 +32,21 @@
     <h2 class="name">Công Cường & Hà Hằng</h2>
     <p class="invite">Trân trọng mời <strong id="guestName">{{ guest_name }}</strong></p>
 
-    <div class="date" style="display:flex; justify-content:center; align-items:center; gap:20px; margin:20px;">
-  <div style="text-align:center; border-right:2px solid #c0c0c0; padding-right:20px;">
-    <div class="small" style="font-weight:bold; letter-spacing:1px;">VÀO LÚC</div>
-    <div style="font-size:1.6rem; font-style:italic; color:#7a5b32;">10:00'</div>
-  </div>
+    <!-- Chú ý: chỉnh value của data-event-time ở đây nếu cần -->
+    <div class="date" data-event-time="2025-11-30T10:00:00">
+      <div class="weekday small" id="weekdayLabel">CHỦ NHẬT</div>
 
-  <div style="text-align:center; padding-left:20px;">
-    <div class="small" style="font-weight:bold; letter-spacing:1px;">CHỦ NHẬT</div>
-    <div style="font-size:1.6rem; font-style:italic; color:#7a5b32;">30.11.2025</div>
-  </div>
-</div>
+      <!-- ngày lớn -->
+      <div class="big" id="dayNumber">30</div>
 
-      <div style="text-align:center;">
-        <div class="time" style="font-size: 1.1rem; color:#007777; margin-bottom:4px;">
-          10:00
-        </div>
-        <div class="big">30</div>
+      <!-- phần chứa tháng + năm -->
+      <div class="small" id="monthYear">THÁNG 11<br>NĂM 2025</div>
+
+      <!-- giờ bên cạnh ngày -->
+      <div class="time">
+        <div class="big-time" id="eventTimeDisplay">10:00</div>
+        <div class="small-time">GIỜ</div>
       </div>
-
-      <div class="small">THÁNG 11<br>NĂM 2025</div>
     </div>
 
     <div class="countdown" id="countdown"></div>
