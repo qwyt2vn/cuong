@@ -97,7 +97,7 @@ function submitChoice(choice) {
 
   if (choice === "Tham gia") {
     window.open(
-      "https://maps.app.goo.gl/E5BN6gBA4B9spQzv8",
+      "https://maps.app.goo.gl/rh2bR38hcQjKqRiN6",
       "_blank"
     );
   } else if (choice === "Bận - Mừng online") {
@@ -140,3 +140,66 @@ function createLeaf() {
 
 // tạo lá liên tục mỗi 500ms
 setInterval(createLeaf, 600);
+// ================= ALBUM ẢNH =================
+let albumImages = [];
+let currentImgIndex = 0;
+
+// Gọi API lấy ảnh từ thư mục (đã được cấu hình ở server.py)
+fetch('/api/album')
+  .then(res => res.json())
+  .then(images => {
+    if(images.length === 0) return;
+    albumImages = images;
+    const grid = document.getElementById('albumGrid');
+    const thumbs = document.getElementById('galleryThumbs');
+    
+    images.forEach((img, index) => {
+      // 1. Thêm ảnh vào lưới bên ngoài
+      const gridImg = document.createElement('img');
+      gridImg.src = img.thumb;
+      gridImg.onclick = () => openGallery(index);
+      grid.appendChild(gridImg);
+
+      // 2. Thêm ảnh vào dải thumbnail trong popup
+      const thumbImg = document.createElement('img');
+      thumbImg.src = img.thumb;
+      thumbImg.onclick = () => showImage(index);
+      thumbs.appendChild(thumbImg);
+    });
+  })
+  .catch(err => console.log("Không tải được album: ", err));
+
+function openGallery(index) {
+  // Lệnh tự động cuộn lên trên cùng (smooth: cuộn mượt, instant: lên ngay lập tức)
+  window.scrollTo({ top: 0, behavior: 'instant' });
+
+  document.getElementById('galleryModal').classList.remove('hidden');
+  document.body.classList.add('hide-leaves'); // Khóa cuộn và tắt lá rơi
+  showImage(index);
+}
+
+function closeGallery() {
+  document.getElementById('galleryModal').classList.add('hidden');
+  document.body.classList.remove('hide-leaves'); // Bật lại lá rơi
+}
+
+function showImage(index) {
+  currentImgIndex = index;
+  document.getElementById('galleryMainImg').src = albumImages[index].full;
+  
+  // Highlight ảnh nhỏ đang xem
+  const allThumbs = document.querySelectorAll('#galleryThumbs img');
+  allThumbs.forEach((t, i) => {
+    t.classList.toggle('active', i === index);
+  });
+}
+
+function prevImage() {
+  currentImgIndex = (currentImgIndex > 0) ? currentImgIndex - 1 : albumImages.length - 1;
+  showImage(currentImgIndex);
+}
+
+function nextImage() {
+  currentImgIndex = (currentImgIndex < albumImages.length - 1) ? currentImgIndex + 1 : 0;
+  showImage(currentImgIndex);
+}

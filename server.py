@@ -1,3 +1,4 @@
+from PIL import Image
 from flask import Flask, request, render_template_string, jsonify, send_from_directory
 import os, datetime, requests
 
@@ -43,6 +44,29 @@ def submit():
 
     return jsonify({"status": "ok"})
 
+@app.route("/api/album")
+def api_album():
+    album_dir = os.path.join(BASE_DIR, "album")
+    thumb_dir = os.path.join(BASE_DIR, "thumbnails")
+    os.makedirs(thumb_dir, exist_ok=True)
+    
+    if not os.path.exists(album_dir): return jsonify([])
+    
+    images = []
+    for f in os.listdir(album_dir):
+        if f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp')):
+            # Tạo thumbnail nếu chưa có
+            thumb_path = os.path.join(thumb_dir, f)
+            if not os.path.exists(thumb_path):
+                with Image.open(os.path.join(album_dir, f)) as img:
+                    img.thumbnail((300, 300)) # Kích thước ảnh nhỏ
+                    img.save(thumb_path)
+            
+            images.append({
+                "full": f"album/{f}",
+                "thumb": f"thumbnails/{f}"
+            })
+    return jsonify(images)
 @app.route("/admin")
 def admin():
     """Hiển thị danh sách backup cục bộ (nếu có)"""
